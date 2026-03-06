@@ -2,7 +2,7 @@ import express, { Request, Response } from "express";
 import initDB from "./config/db";
 import { userRoutes } from "./modules/users/user.route";
 import { authRoutes } from "./modules/auth/auth.route";
-import { vehicleRouts } from "./modules/vehicles/vehicle.route";
+import { vehicleRoutes } from "./modules/vehicles/vehicle.route";
 
 const app = express();
 
@@ -19,7 +19,7 @@ app.use("/api/v1/auth", userRoutes);
 app.use("/api/v1/auth", authRoutes);
 
 // vehicle routes
-app.use("/api/v1/vehicles", vehicleRouts);
+app.use("/api/v1/vehicles", vehicleRoutes);
 
 app.get("/", (req: Request, res: Response) => {
   res.send("Hello from vehicle rental system");
