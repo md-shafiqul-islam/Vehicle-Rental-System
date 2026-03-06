@@ -5,8 +5,6 @@ const signupUser = async (req: Request, res: Response) => {
   try {
     const result = await userServices.signupUser(req.body);
 
-    console.log("Result from user service: ", result);
-
     const { password, ...userWithoutPassword } = result.rows[0];
 
     res.status(201).json({
