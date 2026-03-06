@@ -6,4 +6,6 @@ const router = express.Router();
 
 router.post("/", auth("admin"), vehicleController.createVehicle);
 
+router.get("/", vehicleController.getAllVehicles);
+
 export const vehicleRouts = router;
