@@ -34,14 +34,14 @@
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/yourusername/car-rental-system.git
-cd car-rental-system
+git clone https://github.com/md-shafiqul-islam/Vehicle-Rental-System.git
+cd Vehicle-Rental-System
 ```
 
 ### 2. Install Dependencies
 
 ```bash
-Install Dependencies
+npm install
 ```
 
 ### 3. Configure Environment Variables
