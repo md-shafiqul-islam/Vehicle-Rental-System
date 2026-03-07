@@ -1,6 +1,6 @@
 # 🚗 Vehicle Rental System
 
-**Live URL:** [https://your-live-app-url.com](https://vehicle-rental-system-sable.vercel.app/)
+**Live URL:** https://vehicle-rental-system-sable.vercel.app/
 
 ---
 
