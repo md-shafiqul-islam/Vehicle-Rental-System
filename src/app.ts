@@ -2,6 +2,7 @@ import express, { Request, Response } from "express";
 import initDB from "./config/db";
 import { authRoutes } from "./modules/auth/auth.route";
 import { vehicleRoutes } from "./modules/vehicles/vehicle.route";
+import { userRoutes } from "./modules/users/user.route";
 
 const app = express();
 
@@ -16,6 +17,9 @@ app.use("/api/v1/auth", authRoutes);
 
 // vehicle routes
 app.use("/api/v1/vehicles", vehicleRoutes);
+
+// user routes
+app.use("/api/v1/users", userRoutes);
 
 app.get("/", (req: Request, res: Response) => {
   res.send("Hello from vehicle rental system");
