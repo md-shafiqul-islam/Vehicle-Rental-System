@@ -1,3 +1,4 @@
+import { JwtPayload } from "jsonwebtoken";
 import { pool } from "../../config/db";
 
 const createBooking = async (payload: Record<string, unknown>) => {
@@ -61,6 +62,55 @@ const createBooking = async (payload: Record<string, unknown>) => {
   };
 };
 
+const getAllBookings = async (currentUser: JwtPayload) => {
+  let query = `
+    SELECT 
+      b.id,
+      b.customer_id,
+      b.vehicle_id,
+      b.rent_start_date,
+      b.rent_end_date,
+      b.total_price,
+      b.status,
+      u.name AS customer_name,
+      u.email AS customer_email,
+      v.vehicle_name,
+      v.registration_number,
+      v.type AS vehicle_type
+    FROM bookings b
+    JOIN users u ON b.customer_id = u.id
+    JOIN vehicles v ON b.vehicle_id = v.id
+  `;
+
+  const values: any[] = [];
+
+  if (currentUser.role === "customer") {
+    query += ` WHERE b.customer_id = $1`;
+    values.push(currentUser.id);
+  }
+
+  const result = await pool.query(query, values);
+
+  return result.rows.map((row: any) => ({
+    id: row.id,
+    customer_id: row.customer_id,
+    vehicle_id: row.vehicle_id,
+    rent_start_date: row.rent_start_date,
+    rent_end_date: row.rent_end_date,
+    total_price: row.total_price,
+    status: row.status,
+    customer: {
+      name: row.customer_name,
+      email: row.customer_email,
+    },
+    vehicle: {
+      vehicle_name: row.vehicle_name,
+      registration_number: row.registration_number,
+    },
+  }));
+};
+
 export const bookingServices = {
   createBooking,
+  getAllBookings,
 };
