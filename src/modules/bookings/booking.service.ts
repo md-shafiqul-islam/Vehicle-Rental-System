@@ -110,7 +110,61 @@ const getAllBookings = async (currentUser: JwtPayload) => {
   }));
 };
 
+const updateBooking = async (
+  bookingId: string,
+  status: string,
+  currentUser: JwtPayload,
+) => {
+  // get booking
+  const bookingRes = await pool.query(`SELECT * FROM bookings WHERE id = $1`, [
+    bookingId,
+  ]);
+
+  if (bookingRes.rows.length === 0) {
+    throw new Error("Booking not found");
+  }
+
+  const booking = bookingRes.rows[0];
+
+  // permission checks
+  if (currentUser.role === "customer") {
+    if (booking.customer_id !== currentUser.id) {
+      throw new Error("You cannot update this booking");
+    }
+
+    if (status !== "cancelled") {
+      throw new Error("Customers can only cancel bookings");
+    }
+  }
+
+  if (currentUser.role === "admin" && status !== "returned") {
+    throw new Error("Admin can only mark booking as returned");
+  }
+
+  // update booking
+  const updatedBooking = await pool.query(
+    `UPDATE bookings
+     SET status = $1
+     WHERE id = $2
+     RETURNING *`,
+    [status, bookingId],
+  );
+
+  // if returned or cancelled → vehicle available
+  if (status === "returned" || status === "cancelled") {
+    await pool.query(
+      `UPDATE vehicles
+       SET availability_status = 'available'
+       WHERE id = $1`,
+      [booking.vehicle_id],
+    );
+  }
+
+  return updatedBooking.rows[0];
+};
+
 export const bookingServices = {
   createBooking,
   getAllBookings,
+  updateBooking,
 };
