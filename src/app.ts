@@ -1,6 +1,5 @@
 import express, { Request, Response } from "express";
 import initDB from "./config/db";
-import { userRoutes } from "./modules/users/user.route";
 import { authRoutes } from "./modules/auth/auth.route";
 import { vehicleRoutes } from "./modules/vehicles/vehicle.route";
 
@@ -11,9 +10,6 @@ app.use(express.json());
 
 // initializing DB
 initDB();
-
-// users routes
-app.use("/api/v1/auth", userRoutes);
 
 // auth routes
 app.use("/api/v1/auth", authRoutes);

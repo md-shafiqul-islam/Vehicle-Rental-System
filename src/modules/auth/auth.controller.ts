@@ -1,6 +1,25 @@
 import { Request, Response } from "express";
 import { authServices } from "./auth.service";
 
+const signupUser = async (req: Request, res: Response) => {
+  try {
+    const result = await authServices.signupUser(req.body);
+
+    const { password, ...userWithoutPassword } = result.rows[0];
+
+    res.status(201).json({
+      success: true,
+      message: "User registered successfully",
+      data: userWithoutPassword,
+    });
+  } catch (error: any) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
 const signinUser = async (req: Request, res: Response) => {
   // Extract credentials from request body
   const { email, password } = req.body;
@@ -36,5 +55,6 @@ const signinUser = async (req: Request, res: Response) => {
 };
 
 export const authController = {
+  signupUser,
   signinUser,
 };
