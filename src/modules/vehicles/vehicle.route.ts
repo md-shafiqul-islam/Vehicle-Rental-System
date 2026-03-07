@@ -12,4 +12,10 @@ router.get("/:vehicleId", vehicleController.getVehicleByID);
 
 router.put("/:vehicleId", auth("admin"), vehicleController.updateVehicleByID);
 
+router.delete(
+  "/:vehicleId",
+  auth("admin"),
+  vehicleController.deleteVehicleByID,
+);
+
 export const vehicleRoutes = router;

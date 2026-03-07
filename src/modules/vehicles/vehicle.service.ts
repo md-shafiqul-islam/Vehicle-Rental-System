@@ -59,9 +59,36 @@ const updateVehicleByID = async (
   return result;
 };
 
+const deleteVehicleByID = async (vehicleId: string) => {
+  // Check if vehicle exists
+  const vehicleRes = await pool.query(`SELECT * FROM vehicles WHERE id = $1`, [
+    vehicleId,
+  ]);
+
+  if (vehicleRes.rows.length === 0) {
+    throw new Error("Vehicle not found");
+  }
+
+  // Check for active bookings
+  const bookingRes = await pool.query(
+    `SELECT * FROM bookings WHERE vehicle_id = $1 AND status = 'active'`,
+    [vehicleId],
+  );
+
+  if (bookingRes.rows.length > 0) {
+    throw new Error("Cannot delete vehicle with active bookings");
+  }
+
+  // Delete vehicle
+  await pool.query(`DELETE FROM vehicles WHERE id = $1`, [vehicleId]);
+
+  return true;
+};
+
 export const vehicleServices = {
   createVehicle,
   getAllVehicles,
   getVehicleByID,
   updateVehicleByID,
+  deleteVehicleByID,
 };
