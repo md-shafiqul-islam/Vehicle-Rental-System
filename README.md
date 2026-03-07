@@ -1,6 +1,6 @@
 # 🚗 Vehicle Rental System
 
-**Live URL:** [https://your-live-app-url.com](https://your-live-app-url.com)
+**Live URL:** [https://your-live-app-url.com](https://vehicle-rental-system-sable.vercel.app/)
 
 ---
 
@@ -48,9 +48,7 @@ npm install
 
 ```env
 PORT=5000
-DATABASE_URL=postgres://username:password@localhost:5432/car_rental_db
 JWT_SECRET=your_jwt_secret
-JWT_EXPIRES_IN=1d
 ```
 
 ### 4. Run Database Migrations / Setup Tables
