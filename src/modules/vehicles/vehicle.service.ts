@@ -44,7 +44,15 @@ const updateVehicleByID = async (
   const { vehicle_name, daily_rent_price, availability_status } = payload;
 
   const result = await pool.query(
-    `UPDATE vehicles SET vehicle_name = $1, daily_rent_price = $2, availability_status = $3 WHERE id = $4 RETURNING *`,
+    `
+      UPDATE vehicles 
+      SET 
+        vehicle_name = COALESCE($1, vehicle_name), 
+        daily_rent_price = COALESCE($2, daily_rent_price), 
+        availability_status = COALESCE($3, availability_status) 
+      WHERE id = $4 
+      RETURNING *
+      `,
     [vehicle_name, daily_rent_price, availability_status, id],
   );
 
